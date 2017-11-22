@@ -1,0 +1,35 @@
+require 'yaml'
+
+10.to_yaml
+'ten'.to_yaml
+'10'.to_yaml
+
+puts ({ 'star' => 'hydrogen', 'gold bar' => 'gold' }).to_yaml
+
+
+
+
+require 'set'
+puts Set.new({1, 2, 3}).to_yaml
+
+
+users = [{:name => 'Bob', :permissions => ['Read']},
+         {:name => 'Alice', :permissions => ['Read', 'White']}]
+
+open('users', 'w'){ |f| YAML.dump(users, f) }
+users2 = open("users"){ |f| YAML,load(f) }
+
+
+
+require 'yaml'
+require 'set'
+set = Set.new({1, 2, 3})
+open("sat", "w"){ |f| YAML.dump(set, f)}
+
+
+handle = open('a_file', 'w')
+handle.path
+
+handle2 = YAML.load(YAML.dump(handle))
+hanele2.path
+

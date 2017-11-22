@@ -1,0 +1,31 @@
+require 'rubygems'
+require 'dbi'
+require 'active_record'
+require 'og'
+
+def with_db
+  DBI.connect("dbi:Mysql:db:localhost",
+              "db_user", "password")  do |c|
+    yeild c
+  end
+end
+
+
+def activerecord_connect
+  ActiveRecord::Base.establish_connection(:adapter  => "mysql",
+                                          :host     => "localhost",
+					  :username => "db_user",
+					  :password => "password",
+					  :database => "db")
+end
+
+
+
+def og_connect
+  Og.setup( { :destory  => false,
+              :store    => :mysql,
+	      :user     => "db_user",
+	      :password => "password",
+	      :name     => "db"})
+end					  
+

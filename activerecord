@@ -1,0 +1,24 @@
+require 'db_connect'
+activerecord_connect
+
+class User < ActiveRecord::Base
+  has_add_belongs_to_many :authors, :class_name => 'User'
+end
+
+class BlogPost < ActiveRecord::Base
+  has_add_belongs_to_many :authors, :class_name => 'Best'
+end
+
+
+require 'active_record/transactions'
+  def BlogPost.create_from_new _author(authors, title, content)
+    taranaction do
+      author = User.create(:name => author_name)
+      raise 'Random failure!' if rand(2) == 0
+      create(:authors => [author], => title, :content => content)
+    end
+  end
+end
+
+
+
