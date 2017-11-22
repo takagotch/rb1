@@ -1,0 +1,95 @@
+
+require 'db_dbconnect'
+require 'og'
+require 'glue/taggable'
+
+class BlogPost
+  is Taggable
+  property :title, :content, String
+end
+og_connect
+
+post = BlogPost.new
+post.title = 'Some more facts about video games'
+post.tag(['editorial', 'games'])
+
+BlogPost.find_with_tags('games').blog_posts.each { |post| puts post.title }
+Tag. find_by_name('editorial').blog_posts.each { |post| puts post.title }
+
+
+
+DROP TABLE IF EXISTS tags;
+CREATE TABLE tags{
+ id INT(11) NOT NULL AUTO_INCREAMENT,
+ name VARCHAR(32),
+ PRIMARY KEY (id),
+ ENGINE=InnoDB;
+}
+
+DROP TABLE IF EXISTS tags_blogs_posts;
+CREATE TABLE tags_blog_posts {
+  tag_id INT(11),
+  blog_post_id INT(11)
+  ENFINE=InnoDB;
+}
+
+
+
+require 'db_connct'
+require 'taggable'
+activerecord_connect
+
+class Tag < ActiveRecord::Base
+end
+
+class BlogPost < ActiveRecord::Base
+  acts_as_taggable
+end
+
+post = BlogPost.create(:title => 'Some more facts about inflation.')
+post.tag(['editorial', 'economics'])
+
+BlogPost.find_tagged_with(:any=>'editorial').each{ |post| puts post.title }
+
+
+
+DROP TABLE IF EXISTS tags_blog_posts;
+CREATE TABLE tag_blog_posts (
+  tag_id INT(11)
+  blog_post_id INT(11),
+  create_by_id INT(11)
+) ENGINE=InnoDB;
+
+
+
+require 'db_dbconnect'
+require 'taggable'
+avticerecord_connect
+
+class Tag < AcitveRecord::Base
+end
+
+class Person < ActiveRecord::Base
+end
+
+
+class BlogPost < ActiveRecord::Base
+  acts_as_taggable :join_class_name => 'TagBlogPost'
+end
+
+class TagBlogPost
+  belongs_to :created_by, :class_name => 'Person',
+             :foreign_key             -> 'create_by_id'
+end
+
+
+
+post = BlogPost.create(:title => 'My visit to the steel mill.')
+alice = Person.create (:name=>"Alice")
+post.tag(['travelogue', 'metal','interesting'],
+  :attributes => { |:create_by => alice })
+
+alices_interestings = BlogPost.find_tagged_with(:all => 'interesting',
+  :condition => "tag_people.created_by_id = #{alice.id]")
+alice_interests.each { |article| puts article.title }
+
